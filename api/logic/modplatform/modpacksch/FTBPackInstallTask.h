@@ -28,6 +28,7 @@ private slots:
 private:
     void downloadPack();
     void install();
+    void reportInstall() const;
 
 private:
     NetJobPtr jobPtr;

@@ -196,7 +196,20 @@ void PackInstallTask::install()
     instance.setIconKey(m_instIcon);
     instanceSettings->resumeSave();
 
+    reportInstall();
     emitSucceeded();
+}
+
+void PackInstallTask::reportInstall() const {
+    auto url = QString(BuildConfig.MODPACKSCH_API_BASE_URL + "public/modpack/%1/%2/install")
+            .arg(m_pack.id, m_version.id);
+
+    QNetworkRequest request;
+    request.setHeader(QNetworkRequest::UserAgentHeader, BuildConfig.USER_AGENT);
+    request.setUrl(QUrl(url));
+
+    // Whether this task is completed successfully is inconsequential.
+    ENV.qnam().get(request);
 }
 
 }

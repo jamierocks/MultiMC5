@@ -41,7 +41,7 @@ void LaunchController::login()
 
     // Find an account to use.
     std::shared_ptr<MojangAccountList> accounts = MMC->accounts();
-    MojangAccountPtr account = accounts->activeAccount();
+    AccountPtr account = accounts->activeAccount();
     if (accounts->count() <= 0)
     {
         // Tell the user they need to log in at least one account in order to play.

@@ -56,7 +56,7 @@ public:
     explicit MojangAccountList(QObject *parent = 0);
 
     //! Gets the account at the given index.
-    virtual const MojangAccountPtr at(int i) const;
+    virtual const AccountPtr at(int i) const;
 
     //! Returns the number of accounts in the list.
     virtual int count() const;
@@ -72,7 +72,7 @@ public:
     /*!
      * Adds a the given Mojang account to the account list.
      */
-    virtual void addAccount(const MojangAccountPtr account);
+    virtual void addAccount(const AccountPtr account);
 
     /*!
      * Removes the mojang account with the given username from the account list.
@@ -90,7 +90,7 @@ public:
      * \return A const pointer to the account with the given username. NULL if
      * one doesn't exist.
      */
-    virtual MojangAccountPtr findAccount(const QString &username) const;
+    virtual AccountPtr findAccount(const QString &username) const;
 
     /*!
      * Sets the default path to save the list file to.
@@ -121,7 +121,7 @@ public:
      * is set as active globally.
      * \return The currently active MojangAccount. If there isn't an active account, returns a null pointer.
      */
-    virtual MojangAccountPtr activeAccount() const;
+    virtual AccountPtr activeAccount() const;
 
     /*!
      * Sets the given account as the current active account.
@@ -167,12 +167,12 @@ protected:
      */
     void onActiveChanged();
 
-    QList<MojangAccountPtr> m_accounts;
+    QList<AccountPtr> m_accounts;
 
     /*!
      * Account that is currently active.
      */
-    MojangAccountPtr m_activeAccount;
+    AccountPtr m_activeAccount;
 
     //! Path to the account list file. Empty string if there isn't one.
     QString m_listFilePath;
@@ -197,5 +197,5 @@ slots:
      * then copies the accounts and sets their parents correctly.
      * \param accounts List of accounts whose parents should be set.
      */
-    virtual void updateListData(QList<MojangAccountPtr> versions);
+    virtual void updateListData(QList<AccountPtr> versions);
 };

@@ -35,23 +35,23 @@ MojangAccountList::MojangAccountList(QObject *parent) : QAbstractListModel(paren
 {
 }
 
-MojangAccountPtr MojangAccountList::findAccount(const QString &username) const
+AccountPtr MojangAccountList::findAccount(const QString &username) const
 {
     for (int i = 0; i < count(); i++)
     {
-        MojangAccountPtr account = at(i);
+        AccountPtr account = at(i);
         if (account->username() == username)
             return account;
     }
     return nullptr;
 }
 
-const MojangAccountPtr MojangAccountList::at(int i) const
+const AccountPtr MojangAccountList::at(int i) const
 {
-    return MojangAccountPtr(m_accounts.at(i));
+    return AccountPtr(m_accounts.at(i));
 }
 
-void MojangAccountList::addAccount(const MojangAccountPtr account)
+void MojangAccountList::addAccount(const AccountPtr account)
 {
     int row = m_accounts.count();
     beginInsertRows(QModelIndex(), row, row);
@@ -96,7 +96,7 @@ void MojangAccountList::removeAccount(QModelIndex index)
     }
 }
 
-MojangAccountPtr MojangAccountList::activeAccount() const
+AccountPtr MojangAccountList::activeAccount() const
 {
     return m_activeAccount;
 }
@@ -108,7 +108,7 @@ void MojangAccountList::setActiveAccount(const QString &username)
         int idx = 0;
         auto prevActiveAcc = m_activeAccount;
         m_activeAccount = nullptr;
-        for (MojangAccountPtr account : m_accounts)
+        for (AccountPtr account : m_accounts)
         {
             if (account == prevActiveAcc)
             {
@@ -125,7 +125,7 @@ void MojangAccountList::setActiveAccount(const QString &username)
         auto newActiveAccount = m_activeAccount;
         int newActiveAccountIdx = -1;
         int idx = 0;
-        for (MojangAccountPtr account : m_accounts)
+        for (AccountPtr account : m_accounts)
         {
             if (account->username() == username)
             {
@@ -184,7 +184,7 @@ QVariant MojangAccountList::data(const QModelIndex &index, int role) const
     if (index.row() > count())
         return QVariant();
 
-    MojangAccountPtr account = at(index.row());
+    AccountPtr account = at(index.row());
 
     switch (role)
     {
@@ -280,7 +280,7 @@ bool MojangAccountList::setData(const QModelIndex &index, const QVariant &value,
     {
         if(value == Qt::Checked)
         {
-            MojangAccountPtr account = this->at(index.row());
+            AccountPtr account = this->at(index.row());
             this->setActiveAccount(account->username());
         }
     }
@@ -289,7 +289,7 @@ bool MojangAccountList::setData(const QModelIndex &index, const QVariant &value,
     return true;
 }
 
-void MojangAccountList::updateListData(QList<MojangAccountPtr> versions)
+void MojangAccountList::updateListData(QList<AccountPtr> versions)
 {
     beginResetModel();
     m_accounts = versions;
@@ -411,7 +411,7 @@ bool MojangAccountList::saveList(const QString &filePath)
     // Build a list of accounts.
     qDebug() << "Building account array.";
     QJsonArray accounts;
-    for (MojangAccountPtr account : m_accounts)
+    for (AccountPtr account : m_accounts)
     {
         QJsonObject accountObj = account->saveToJson();
         accounts.append(accountObj);

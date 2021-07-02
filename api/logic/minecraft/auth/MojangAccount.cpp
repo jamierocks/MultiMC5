@@ -95,17 +95,7 @@ MojangAccountPtr MojangAccount::loadFromJson(const QJsonObject &object)
     return account;
 }
 
-MojangAccountPtr MojangAccount::createFromUsername(const QString &username)
-{
-    MojangAccountPtr account(new MojangAccount());
-    account->m_clientToken = QUuid::createUuid().toString().remove(QRegExp("[{}-]"));
-    account->m_username = username;
-    return account;
-}
-
-QJsonObject MojangAccount::saveToJson() const
-{
-    QJsonObject json;
+QJsonObject MojangAccount::saveToJson(QJsonObject json) const {
     json.insert("username", m_username);
     json.insert("clientToken", m_clientToken);
     json.insert("accessToken", m_accessToken);
@@ -140,6 +130,14 @@ QJsonObject MojangAccount::saveToJson() const
         json.insert("activeProfile", currentProfile()->id);
 
     return json;
+}
+
+MojangAccountPtr MojangAccount::createFromUsername(const QString &username)
+{
+    MojangAccountPtr account(new MojangAccount());
+    account->m_clientToken = QUuid::createUuid().toString().remove(QRegExp("[{}-]"));
+    account->m_username = username;
+    return account;
 }
 
 bool MojangAccount::setCurrentProfile(const QString &profileId)

@@ -27,6 +27,7 @@
 #include "Usable.h"
 
 #include "multimc_logic_export.h"
+#include "BaseAccount.h"
 
 class Task;
 class YggdrasilTask;
@@ -49,12 +50,6 @@ struct AccountProfile
     bool legacy;
 };
 
-enum AccountStatus
-{
-    NotVerified,
-    Verified
-};
-
 /**
  * Object that stores information about a certain Mojang account.
  *
@@ -62,7 +57,7 @@ enum AccountStatus
  * token if the user chose to stay logged in.
  */
 class MULTIMC_LOGIC_EXPORT MojangAccount :
-    public QObject,
+    public BaseAccount,
     public Usable,
     public std::enable_shared_from_this<MojangAccount>
 {
@@ -72,7 +67,7 @@ public: /* construction */
     explicit MojangAccount(const MojangAccount &other, QObject *parent) = delete;
 
     //! Default constructor
-    explicit MojangAccount(QObject *parent = 0) : QObject(parent) {};
+    explicit MojangAccount(QObject *parent = 0) : BaseAccount(parent) {};
 
     //! Creates an empty account for the specified user name.
     static MojangAccountPtr createFromUsername(const QString &username);
@@ -80,11 +75,8 @@ public: /* construction */
     //! Loads a MojangAccount from the given JSON object.
     static MojangAccountPtr loadFromJson(const QJsonObject &json);
 
-    //! Saves a MojangAccount to a JSON object and returns it.
-    QJsonObject saveToJson() const;
-
 public: /* manipulation */
-        /**
+    /**
      * Sets the currently selected profile to the profile with the given ID string.
      * If profileId is not in the list of available profiles, the function will simply return
      * false.
@@ -99,7 +91,9 @@ public: /* manipulation */
     void invalidateClientToken();
 
 public: /* queries */
-    const QString &username() const
+    QString getType() const override { return "mojang"; }
+
+    const QString &username() const override
     {
         return m_username;
     }
@@ -128,7 +122,7 @@ public: /* queries */
     const AccountProfile *currentProfile() const;
 
     //! Returns whether the account is NotVerified, Verified or Online
-    AccountStatus accountStatus() const;
+    AccountStatus accountStatus() const override;
 
 signals:
     /**
@@ -162,6 +156,7 @@ protected: /* variables */
     std::shared_ptr<YggdrasilTask> m_currentTask;
 
 protected: /* methods */
+    QJsonObject saveToJson(QJsonObject) const override;
 
     void incrementUses() override;
     void decrementUses() override;
@@ -172,7 +167,7 @@ slots:
     void authFailed(QString reason);
 
 private:
-    void fillSession(AuthSessionPtr session);
+    void fillSession(AuthSessionPtr session) override;
 
 public:
     friend class YggdrasilTask;

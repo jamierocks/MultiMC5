@@ -201,6 +201,8 @@ set(MINECRAFT_SOURCES
     # Minecraft support
     minecraft/auth/AuthSession.h
     minecraft/auth/AuthSession.cpp
+    minecraft/auth/BaseAccount.h
+    minecraft/auth/BaseAccountProvider.h
     minecraft/auth/MojangAccountList.h
     minecraft/auth/MojangAccountList.cpp
     minecraft/auth/MojangAccount.h
@@ -213,6 +215,7 @@ set(MINECRAFT_SOURCES
     minecraft/auth/flows/RefreshTask.cpp
     minecraft/auth/flows/ValidateTask.h
     minecraft/auth/flows/ValidateTask.cpp
+    minecraft/auth/mojang/MojangAccountProvider.h
 
     minecraft/gameoptions/GameOptions.h
     minecraft/gameoptions/GameOptions.cpp
